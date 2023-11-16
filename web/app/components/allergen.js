@@ -18,8 +18,6 @@ export default function allergen({props}) {
 
   useEffect(() => {
     const last = window.localStorage.getItem(props.title);
-    console.log(last);
-    console.log("typeof last: ", typeof last, "\nLast is truthy? ", last ? 'truthy' : 'falsy');
     if(last) {
       setHistory(new Date(last));
     }

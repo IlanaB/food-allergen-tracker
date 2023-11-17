@@ -1,11 +1,14 @@
 import React from 'react'
 
-export default function eaten({props}) {
+export default function eaten({ props }) {
+
+  const { updater, sorter, title } = props;
 
   return (
     <div>
       <button onClick={() => {
-        props.updater(new Date())
+        updater(new Date());
+        sorter(title);
       }}>
         Fed
       </button>

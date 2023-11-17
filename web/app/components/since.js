@@ -16,10 +16,11 @@ export default function since({props}) {
   }, [])
 
   const daysSince = Math.floor((time - since) / (1000 * 24 * 60 * 60));
+  // const daysSince = Math.floor((time - since) / (1000));
  
   return ( 
     <div>
-      <p>{since ? `Seconds since last eaten: ${daysSince}` : 'Never eaten' }</p>
+      <p>{since ? `Days since last eaten: ${daysSince}` : 'Never eaten' }</p>
     </div>
   )
 }

@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import Since from './components/since';
 import Allergen from './components/allergen';
+import Modal from './components/modal';
+import AllergenList from './components/allergenList';
 import { useEffect, useState } from 'react';
 
 let allergenNames = [
@@ -18,9 +20,11 @@ let allergenNames = [
 
 export default function Home() {
   const [allergens, setAllergens] = useState(allergenNames);
+  const [almodal, setAlmodal] = useState(false);
 
   useEffect(() => {
     sortAllergens()
+    updateAllergens()
   }, [])
 
   function sortAllergens() {
@@ -30,8 +34,15 @@ export default function Home() {
     setAllergens(sortedTitles)
   }
 
+  function updateAllergens() {
+    const userInputAllergens = window.localStorage.getItem("userAllergens");
+    if(userInputAllergens !== null) {
+      setAllergens(userInputAllergens.split(','))
+    }
+  };
+
   function bindAllergensToDates() {
-    return (allergenNames.map(allergen => {
+    return (allergens.map(allergen => {
       const stored = window.localStorage.getItem(allergen)
       if(stored === null) {
         return {allergen, date: null}
@@ -58,6 +69,10 @@ export default function Home() {
           <Allergen props={{title: gen, sorter: sortAllergens}} key={gen} />
         )
       })}
+      <button onClick={() => setAlmodal(!almodal)}>
+        open list
+      </button>
+      {almodal && <AllergenList props={{closer: setAlmodal, allergens, setAllergens}} />}
     </main>
   )
 }

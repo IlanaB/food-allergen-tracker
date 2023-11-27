@@ -20,7 +20,7 @@ export default function since({props}) {
  
   return ( 
     <div>
-      <p>{since ? `Days since last eaten: ${daysSince}` : 'Never eaten' }</p>
+      <p>{since ? `Days since last eaten: ${daysSince < 0 ? 0 : daysSince}` : 'Never eaten' }</p>
     </div>
   )
 }

@@ -17,9 +17,6 @@ let allergenNames = [
   'Sesame'
 ]
 
-//cheeky breeky edit to push
-
-
 export default function Home() {
   const [allergens, setAllergens] = useState(allergenNames);
   const [almodal, setAlmodal] = useState(false);
@@ -71,7 +68,9 @@ export default function Home() {
           <Allergen props={{title: gen, sorter: sortAllergens}} key={gen} />
         )
       })}
-      <button onClick={() => setAlmodal(!almodal)}>
+      <button onClick={() => setAlmodal(!almodal)}
+        className="p-10"
+      >
         open list
       </button>
       {almodal && <AllergenList props={{closer: setAlmodal, allergens, setAllergens}} />}

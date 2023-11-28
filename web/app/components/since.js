@@ -2,7 +2,7 @@
 
 import React, {useState, useEffect} from 'react'
 
-export default function since({props}) {
+export default function Since({props}) {
   const [time, setTime] = useState(props.time);
   let { since } = props;
 

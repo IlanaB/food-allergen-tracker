@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "./modal";
 
-export default function allergenList({ props }) {
+export default function AllergenList({ props }) {
   const { allergens, setAllergens, closer } = props;
   const [newAllergens, setNewAllergens] = useState(allergens);
   const [newAllergen, setNewAllergen] = useState("");
@@ -21,8 +21,8 @@ export default function allergenList({ props }) {
       <div className="grid grid-cols-2">
         {newAllergens.map((allergen) => {
           return (
-            <div className="grid grid-cols-2 col-span-2">
-              <p key={allergen}>{allergen}</p>
+            <div key={allergen} className="grid grid-cols-2 col-span-2">
+              <p>{allergen}</p>
               <button className=" rounded bg-gray-200 mb-1 w-12 justify-self-center"
                 onClick={() => {removeFromList(allergen)}}
               >-</button>

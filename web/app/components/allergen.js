@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useState } from 'react'
 import Since from './since';
 import Eaten from './eaten';
 
-export default function allergen({props}) {
+export default function Allergen({props}) {
   const [history, setHistory] = useState(false);
 
   const { sorter, title } = props;

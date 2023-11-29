@@ -15,13 +15,13 @@ export default function Since({props}) {
     }
   }, [])
 
-  // const daysSince = Math.floor((time - since) / (1000 * 24 * 60 * 60));
-  const secondsSince = Math.floor((time - since) / (1000));
+  const daysSince = Math.floor((time - since) / (1000 * 24 * 60 * 60));
+  // const secondsSince = Math.floor((time - since) / (1000));
  
   return ( 
     <div>
-      {/* <p>{since ? `Days since last eaten: ${daysSince < 0 ? 0 : secondsSince}` : 'Never eaten' }</p> */}
-      <p>{since ? `Seconds since last eaten: ${secondsSince < 0 ? 0 : secondsSince}` : 'Never eaten' }</p>
+      <p>{since ? `Days since last eaten: ${daysSince < 0 ? 0 : secondsSince}` : 'Never eaten' }</p>
+      {/* <p>{since ? `Seconds since last eaten: ${secondsSince < 0 ? 0 : secondsSince}` : 'Never eaten' }</p> */}
     </div>
   )
 }

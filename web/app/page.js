@@ -36,5 +36,5 @@ export default function Home() {
 }
 
 function allergenTimeSortCallback(a, b) {
-  return b.time - a.time
+  return a.time - b.time
 }

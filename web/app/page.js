@@ -1,19 +1,31 @@
 'use client'
 import { useEffect, useState, useLayoutEffect } from 'react';
 import Allergen from './components/allergen'
+import Since from './components/since'
+import Resetter from './components/resetter'
 
 let allergenNames = [
-  {name: 'Milk', time: 1},
-  {name: 'Eggs', time: 33},
-  {name: 'Nuts', time: 5},
-  {name: 'Fish', time: 67},
-  {name: 'Wheat', time: 34},
-  {name: 'Soy', time: 35},
-  {name: 'Sesame', time: 3},
+  {name: 'Milk', time: new Date()},
+  {name: 'Eggs', time: new Date()},
+  {name: 'Nuts', time: new Date()},
+  {name: 'Fish', time: new Date()},
+  {name: 'Wheat', time: new Date()},
+  {name: 'Soy', time: new Date()},
+  {name: 'Sesame', time: new Date()},
 ]
 
 export default function Home() {
   const [allergens, setAllergens] = useState(allergenNames.sort(allergenTimeSortCallback));
+
+  function updateTime(allergen) {
+    setAllergens(allergens.map(gen => {
+      if(gen.name === allergen) {
+        return {name: allergen, time: new Date()}
+      } else {
+        return gen
+      }
+    }))
+  }
 
   return (
     <main>
@@ -25,8 +37,14 @@ export default function Home() {
             <li key={name}>
 
               <Allergen
-                props={ {name, time} }/>
+                props={ {name} }>
+                  <Since props={time} />
+                  <Resetter props={{
+                    updater: updateTime,
+                    name,
 
+                  }}/>
+              </Allergen>
             </li>
           )})}
         </ul>
@@ -38,3 +56,5 @@ export default function Home() {
 function allergenTimeSortCallback(a, b) {
   return b.time - a.time
 }
+
+

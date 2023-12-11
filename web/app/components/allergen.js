@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from "react";
+import Since from "./since";
 
-export default function Allergen({props, children}) {
-  const {name, time} = props;
+export default function Allergen({ props, children }) {
+  const { name } = props;
   return (
     <div>
-      <p className='font-bold text-lg'>{name}</p>
-      <p>{time}</p>
+      <p className="font-bold text-lg">{name}</p>
+      {children}
     </div>
-  )
+  );
 }

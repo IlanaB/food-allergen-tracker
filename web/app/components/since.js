@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 export default function Since({ props }) {
   const [time, setTime] = useState(new Date());
 
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
@@ -18,6 +19,7 @@ export default function Since({ props }) {
     : "Never Eaten";
 
   return (
+
     <div>
       {/* <p>{since ? `Days since last eaten: ${daysSince < 0 ? 0 : daysSince}` : 'Never eaten' }</p> */}
       {/* <p>{since ? `Seconds since last eaten: ${secondsSince < 0 ? 0 : secondsSince}` : 'Never eaten' }</p> */}

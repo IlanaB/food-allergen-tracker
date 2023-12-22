@@ -29,6 +29,7 @@ export default function Home() {
           const time = new Date();
           window.localStorage.setItem(allergen.name, time);
           return { name: targetAllergen, time };
+
         } else {
           return allergen;
         }

@@ -3,40 +3,37 @@ import { useEffect, useState } from "react";
 import Since from "./components/since";
 
 let allergenNames = [
-  { name: "Milk", time: null },
-  { name: "Eggs", time: null },
-  { name: "Nuts", time: null },
-  { name: "Fish", time: null },
-  { name: "Wheat", time: null },
-  { name: "Soy", time: null },
-  { name: "Sesame", time: null },
+  { name: "Milk" },
+  { name: "Eggs" },
+  { name: "Nuts" },
+  { name: "Fish" },
+  { name: "Wheat" },
+  { name: "Soy" },
+  { name: "Sesame" },
 ];
 
 export default function Home() {
   const [allergens, setAllergens] = useState(
-    allergenNames.sort(allergenTimeSortCallback)
+    stateSetter()
   );
 
   useEffect(() => {
-    const newTimes = loadTimesFromLocalStorage();
-    setAllergens(newTimes.sort(allergenTimeSortCallback));
-  }, []);
+    storeJSONinLocal("allergens", allergens);
+  }, [allergens]);
 
   function updateTime(targetAllergen) {
+    const time = new Date();
     setAllergens(
       allergens.map((allergen) => {
         if (allergen.name === targetAllergen) {
-          const time = new Date();
-          window.localStorage.setItem(allergen.name, time);
           return { name: targetAllergen, time };
-
         } else {
           return allergen;
         }
       })
     );
-    setAllergens((a) => a.sort(allergenTimeSortCallback));
-  }
+    setAllergens(a => a.sort(allergenTimeSortCallback));
+    }
 
   return (
     <main>
@@ -77,11 +74,30 @@ function allergenTimeSortCallback(a, b) {
   }
 }
 
-function loadTimesFromLocalStorage() {
-  const newTimes = allergenNames.map(({ name }) => {
-    const storedTime = window.localStorage.getItem(name);
-    const time = storedTime ? new Date(storedTime) : null;
+function loadJSONfromLocal(key) {
+  const storedTimes = JSON.parse(window.localStorage.getItem(key));
+  if (storedTimes === null) {
+    console.log("LoadJSON reading null");
+    return null;
+  }
+  return storedTimes.map(({ name, time }) => {
+    if (time) {
+      return { name, time: new Date(time) };
+    }
     return { name, time };
   });
-  return newTimes;
+}
+
+function storeJSONinLocal(key, value) {
+  window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+function stateSetter() {
+  const allergens = loadJSONfromLocal("allergens");
+  if(allergens) {
+    return allergens
+  }
+  return allergenNames.map(({name}) => {
+    return {name, time: null}
+  })
 }

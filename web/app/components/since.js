@@ -23,7 +23,7 @@ export default function Since({ props }) {
     <div>
       {/* <p>{since ? `Days since last eaten: ${daysSince < 0 ? 0 : daysSince}` : 'Never eaten' }</p> */}
       {/* <p>{since ? `Seconds since last eaten: ${secondsSince < 0 ? 0 : secondsSince}` : 'Never eaten' }</p> */}
-      <p>{`Seconds since last eaten: ${secondsSince}`}</p>
+      <p>{`Seconds since last eaten: ${secondsSince < 0 ? 0 : secondsSince}`}</p>
     </div>
   );
 }

@@ -2,20 +2,10 @@
 import { useEffect, useState } from "react";
 import Since from "./components/since";
 
-let allergenNames = [
-  { name: "Milk" },
-  { name: "Eggs" },
-  { name: "Nuts" },
-  { name: "Fish" },
-  { name: "Wheat" },
-  { name: "Soy" },
-  { name: "Sesame" },
-];
+let allergenNames = ["Milk", "Eggs", "Nuts", "Fish", "Wheat", "Soy", "Sesame"];
 
 export default function Home() {
-  const [allergens, setAllergens] = useState(
-    stateSetter()
-  );
+  const [allergens, setAllergens] = useState(loadAllergensOrDefault());
 
   useEffect(() => {
     storeJSONinLocal("allergens", allergens);
@@ -32,8 +22,8 @@ export default function Home() {
         }
       })
     );
-    setAllergens(a => a.sort(allergenTimeSortCallback));
-    }
+    setAllergens((a) => a.sort(allergenTimeSortCallback));
+  }
 
   return (
     <main>
@@ -45,8 +35,13 @@ export default function Home() {
           {allergens.map(({ name, time }) => {
             return (
               <li key={name}>
-                <p className="font-bold text-lg">{name}</p>
-                <Since props={time} />
+                <p
+                  className="font-bold text-lg"
+                  suppressHydrationWarning={true}
+                >
+                  {name}
+                </p>
+                <Since lastEaten={time} />
                 <button
                   onClick={() => {
                     updateTime(name);
@@ -75,29 +70,28 @@ function allergenTimeSortCallback(a, b) {
 }
 
 function loadJSONfromLocal(key) {
-  const storedTimes = JSON.parse(window.localStorage.getItem(key));
-  if (storedTimes === null) {
-    console.log("LoadJSON reading null");
-    return null;
-  }
-  return storedTimes.map(({ name, time }) => {
-    if (time) {
-      return { name, time: new Date(time) };
+  if (typeof window !== "undefined") {
+    const storedTimes = JSON.parse(window.localStorage.getItem(key));
+    if (storedTimes === null) {
+      console.log("LoadJSON reading null");
+      return null;
     }
-    return { name, time };
-  });
+    return storedTimes.map(({ name, time }) => {
+      return { name, time: time ? new Date(time) : null };
+    });
+  }
 }
 
 function storeJSONinLocal(key, value) {
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 
-function stateSetter() {
+function loadAllergensOrDefault() {
   const allergens = loadJSONfromLocal("allergens");
-  if(allergens) {
-    return allergens
-  }
-  return allergenNames.map(({name}) => {
-    return {name, time: null}
-  })
+  return (
+    allergens ||
+    allergenNames.map((name) => {
+      return { name, time: null };
+    })
+  );
 }

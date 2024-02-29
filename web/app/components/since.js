@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 
-export default function Since( { props }) {
-  const [time, setTime] = useState(new Date());
-  const since = new Date(props);
+export default function Since({ lastEaten }) {
+  const [now, setNow] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000)
+      setNow(new Date());
+    }, 1000);
     return () => {
-      clearInterval(timer)
-    }
-  }, [])
-  
-  // const daysSince = Math.floor((time - since) / (1000 * 24 * 60 * 60));
-  const secondsSince = Math.floor((time - since) / (1000));
-  
-  return ( 
+      clearInterval(timer);
+    };
+  }, []);
+
+  let timeSinceEaten;
+  if (lastEaten) {
+    timeSinceEaten = Math.floor((now - lastEaten) / 1000);
+  }
+
+  return (
     <div>
-      {/* <p>{since ? `Days since last eaten: ${daysSince < 0 ? 0 : daysSince}` : 'Never eaten' }</p> */}
-      {/* <p>{since ? `Seconds since last eaten: ${secondsSince < 0 ? 0 : secondsSince}` : 'Never eaten' }</p> */}
-      <p>{`Seconds since last eaten: ${secondsSince}`}</p>
+      <p suppressHydrationWarning={true}>
+        {lastEaten
+          ? `Seconds since last eaten: ${timeSinceEaten < 0 ? 0 : timeSinceEaten}`
+          : "Never Eaten"}
+      </p>
     </div>
-  )
+  );
 }

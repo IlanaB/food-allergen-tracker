@@ -1,33 +1,25 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Since from "./components/since";
-import Resetter from "./components/resetter";
 
-let allergenNames = [
-  { name: "Milk", time: new Date() },
-  { name: "Eggs", time: new Date() },
-  { name: "Nuts", time: new Date() },
-  { name: "Fish", time: new Date() },
-  { name: "Wheat", time: new Date() },
-  { name: "Soy", time: new Date() },
-  { name: "Sesame", time: new Date() },
-];
+let allergenNames = ["Milk", "Eggs", "Nuts", "Fish", "Wheat", "Soy", "Sesame"];
 
 export default function Home() {
-  const [allergens, setAllergens] = useState(
-    allergenNames.sort(allergenTimeSortCallback)
-  );
+  const [allergens, setAllergens] = useState(loadAllergensOrDefault());
 
   function updateTime(targetAllergen) {
-    setAllergens(
-      allergens.map((allergen) => {
+    const time = new Date();
+    const updatedAllergens = allergens
+      .map((allergen) => {
         if (allergen.name === targetAllergen) {
-          return { name: targetAllergen, time: new Date() };
+          return { name: targetAllergen, time };
         } else {
           return allergen;
         }
       })
-    );
+      .sort(allergenTimeSortCallback);
+    storeJSONinLocal("allergens", updatedAllergens);
+    setAllergens(updatedAllergens);
   }
 
   return (
@@ -40,14 +32,20 @@ export default function Home() {
           {allergens.map(({ name, time }) => {
             return (
               <li key={name}>
-                <p className="font-bold text-lg">{name}</p>
-                <Since props={time} />
-                <Resetter
-                  props={{
-                    updater: updateTime,
-                    name,
+                <p
+                  className="font-bold text-lg"
+                  suppressHydrationWarning={true}
+                >
+                  {name}
+                </p>
+                <Since lastEaten={time} />
+                <button
+                  onClick={() => {
+                    updateTime(name);
                   }}
-                />
+                >
+                  Fed
+                </button>
               </li>
             );
           })}
@@ -58,5 +56,35 @@ export default function Home() {
 }
 
 function allergenTimeSortCallback(a, b) {
-  return b.time - a.time;
+  if (a.time && b.time) {
+    return a.time - b.time;
+  }
+  if (!a.time) {
+    return 1;
+  } else {
+    return -1;
+  }
+}
+
+function loadJSONfromLocal(key) {
+  if (typeof window !== "undefined") {
+    const storedTimes = JSON.parse(window.localStorage.getItem(key));
+    return storedTimes.map(({ name, time }) => {
+      return { name, time: time ? new Date(time) : null };
+    });
+  }
+}
+
+function storeJSONinLocal(key, value) {
+  window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+function loadAllergensOrDefault() {
+  const allergens = loadJSONfromLocal("allergens");
+  return (
+    allergens ||
+    allergenNames.map((name) => {
+      return { name, time: null };
+    })
+  );
 }

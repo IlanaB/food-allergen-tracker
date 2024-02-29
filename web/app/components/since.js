@@ -12,15 +12,18 @@ export default function Since({ lastEaten }) {
     };
   }, []);
 
-  const secondsSince = lastEaten
-    ? Math.floor((now - lastEaten) / 1000)
-    : "Never Eaten";
+  let timeSinceEaten;
+  if (lastEaten) {
+    timeSinceEaten = Math.floor((now - lastEaten) / 1000);
+  }
 
   return (
     <div>
-      <p suppressHydrationWarning={true}>{`Seconds since last eaten: ${
-        secondsSince < 0 ? 0 : secondsSince
-      }`}</p>
+      <p suppressHydrationWarning={true}>
+        {lastEaten
+          ? `Seconds since last eaten: ${timeSinceEaten < 0 ? 0 : timeSinceEaten}`
+          : "Never Eaten"}
+      </p>
     </div>
   );
 }

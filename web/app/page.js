@@ -7,22 +7,19 @@ let allergenNames = ["Milk", "Eggs", "Nuts", "Fish", "Wheat", "Soy", "Sesame"];
 export default function Home() {
   const [allergens, setAllergens] = useState(loadAllergensOrDefault());
 
-  useEffect(() => {
-    storeJSONinLocal("allergens", allergens);
-  }, [allergens]);
-
   function updateTime(targetAllergen) {
     const time = new Date();
-    setAllergens(
-      allergens.map((allergen) => {
+    const updatedAllergens = allergens
+      .map((allergen) => {
         if (allergen.name === targetAllergen) {
           return { name: targetAllergen, time };
         } else {
           return allergen;
         }
       })
-    );
-    setAllergens((a) => a.sort(allergenTimeSortCallback));
+      .sort(allergenTimeSortCallback);
+    storeJSONinLocal("allergens", updatedAllergens);
+    setAllergens(updatedAllergens);
   }
 
   return (
@@ -72,10 +69,6 @@ function allergenTimeSortCallback(a, b) {
 function loadJSONfromLocal(key) {
   if (typeof window !== "undefined") {
     const storedTimes = JSON.parse(window.localStorage.getItem(key));
-    if (storedTimes === null) {
-      console.log("LoadJSON reading null");
-      return null;
-    }
     return storedTimes.map(({ name, time }) => {
       return { name, time: time ? new Date(time) : null };
     });

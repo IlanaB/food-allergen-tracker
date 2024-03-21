@@ -4,7 +4,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Allergen Tracker',
+  title: 'Allergen Tracker test',
   description: 'Track how long it has been since your baby had these common allergens',
 }
 

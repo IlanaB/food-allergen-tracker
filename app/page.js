@@ -5,14 +5,18 @@ import Since from "./components/since";
 let allergenNames = ["Milk", "Eggs", "Nuts", "Fish", "Wheat", "Soy", "Sesame"];
 
 export default function Home() {
-  const [allergens, setAllergens] = useState(loadAllergensOrDefault());
+  const [allergens, setAllergens] = useState([]);
+
+  useEffect(() => {
+    setAllergens(loadAllergensOrDefault())
+  }, [])
 
   function updateTime(targetAllergen) {
     const time = new Date();
     const updatedAllergens = allergens
       .map((allergen) => {
         if (allergen.name === targetAllergen) {
-          return { name: targetAllergen, time };
+          return {...allergen, time};
         } else {
           return allergen;
         }
@@ -34,7 +38,6 @@ export default function Home() {
               <li key={name}>
                 <p
                   className="font-bold text-lg"
-                  suppressHydrationWarning={true}
                 >
                   {name}
                 </p>
@@ -69,10 +72,16 @@ function allergenTimeSortCallback(a, b) {
 function loadJSONfromLocal(key) {
   if (typeof window !== "undefined") {
     const storedTimes = JSON.parse(window.localStorage.getItem(key));
-    return storedTimes.map(({ name, time }) => {
-      return { name, time: time ? new Date(time) : null };
-    });
+    if (storedTimes) {
+      return storedTimes.map(({ name, time }) => {
+        console.log("loaded: ", name, time)
+        return { name, time: time ? new Date(time) : null };
+      });
+    } else {
+      return null;
+    }
   }
+  return [];
 }
 
 function storeJSONinLocal(key, value) {

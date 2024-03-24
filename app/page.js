@@ -70,7 +70,6 @@ function allergenTimeSortCallback(a, b) {
 }
 
 function loadJSONfromLocal(key) {
-  if (typeof window !== "undefined") {
     const storedTimes = JSON.parse(window.localStorage.getItem(key));
     if (storedTimes) {
       return storedTimes.map(({ name, time }) => {
@@ -80,8 +79,6 @@ function loadJSONfromLocal(key) {
     } else {
       return null;
     }
-  }
-  return [];
 }
 
 function storeJSONinLocal(key, value) {
